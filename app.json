@@ -2,7 +2,7 @@
   "expo": {
     "sdkVersion": "25.0.0",
     "icon": "./assets/nblogo.png",
-    "slug": "nativebasekitchensink",
+    "slug": "rockpaperscissorsdapp",
     "loading": {
       "hideExponentText": true,
       "backgroundImage": "./assets/splashscreen.png"
@@ -10,9 +10,7 @@
     "orientation": "portrait",
     "primaryColor": "#cccccc",
     "packagerOpts": {
-      "assetExts": [
-        "ttf"
-      ]
+      "assetExts": ["ttf"]
     },
     "androidStatusBarColor": "#334393",
     "androidStatusBar": {
