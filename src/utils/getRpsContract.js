@@ -1,22 +1,40 @@
-import contract from 'truffle-contract'
-
-import RpsContract from '../contracts/Rps.json'
+import rpsContractJson from '../contracts/Rps.json'
 import getWeb3 from './getWeb3'
 
-const getRpsContract = async () => {
-  const rps = contract(RpsContract)
-  const web3 = getWeb3()
-  rps.setProvider(web3.currentProvider)
+var contractInstance = null
 
-  // dirty hack for web3@1.0.0 support for localhost testrpc,
-  // see https://github.com/trufflesuite/truffle-contract/issues/56#issuecomment-331084530
-  if (typeof rps.currentProvider.sendAsync !== 'function') {
-    rps.currentProvider.sendAsync = function() {
-      return rps.currentProvider.send.apply(rps.currentProvider, arguments)
-    }
+export class RpsContract {
+  constructor(networkId, contractJson) {
+    this.web3 = getWeb3()
+    const contractAddress = contractJson.networks[networkId].address
+    const RpsContract = this.web3.eth.contract(contractJson.abi)
+    this.contract = RpsContract.at(contractAddress)
   }
 
-  return await rps.deployed()
+  getGameStatus(gameName) {
+    return new Promise((resolve, reject) => {
+      this.contract.getGameStatus(gameName, (err, result) => {
+        if (err) {
+          return reject(err)
+        }
+
+        resolve(result.toNumber())
+      })
+    })
+  }
+}
+
+/**
+ * Returns a singleton instance
+ */
+const getRpsContract = () => {
+  if (contractInstance) {
+    return contractInstance
+  }
+
+  const networkId = 4 // rinkeby
+  contractInstance = new RpsContract(networkId, rpsContractJson)
+  return contractInstance
 }
 
 export default getRpsContract

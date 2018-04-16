@@ -18,20 +18,20 @@ export const GameStatus = {
 }
 
 export const getGameStatus = async gameName => {
-  const gameNameHex = utils.utf8ToHex(gameName)
-  return gameNameHex
-  // const rps = await getRpsContract()
-  // return await rps.getGameStatus(gameNameHex)
+  const gameNameHex = getWeb3().toHex(gameName)
+  return await getRpsContract().getGameStatus(gameNameHex)
 }
 
 export const getWinnerAddress = async gameName => {
-  const gameNameHex = utils.utf8ToHex(gameName)
+  const web3 = getWeb3()
+  const gameNameHex = web3.toHex(gameName)
   const rps = await getRpsContract()
   return await rps.getWinnerAddress(gameNameHex)
 }
 
 export const getBetValue = async gameName => {
-  const gameNameHex = utils.utf8ToHex(gameName)
+  const web3 = getWeb3()
+  const gameNameHex = web3.toHex(gameName)
   const rps = await getRpsContract()
   return await rps.getBetValue(gameNameHex)
 }
@@ -63,7 +63,8 @@ export const startGame = async formData => {
     throw new Error({ ...errors, _error: 'Please fix the errors' })
   }
 
-  const gameNameHex = utils.utf8ToHex(formData.gameName)
+  const web3 = getWeb3()
+  const gameNameHex = web3.toHex(formData.gameName)
   const status = (await getGameStatus(formData.gameName)).toNumber()
   if (status !== GameStatus.notStarted) {
     throw new Error({
@@ -105,7 +106,8 @@ export const joinGame = async formData => {
     })
   }
 
-  const gameNameHex = utils.utf8ToHex(formData.gameName)
+  const web3 = getWeb3()
+  const gameNameHex = web3.toHex(formData.gameName)
   const rps = await getRpsContract()
   const { secret } = gameParameters.save(formData.gameName, formData.fromAccount, formData.shape)
   const hash = shapeHash(formData.shape, secret)
@@ -121,7 +123,8 @@ export const joinGame = async formData => {
 
 export const getReward = async gameName => {
   const { account } = gameParameters.get(gameName)
-  const gameNameHex = utils.utf8ToHex(gameName)
+  const web3 = getWeb3()
+  const gameNameHex = web3.toHex(gameName)
   const rps = await getRpsContract()
   const tx = await rps.getReward(gameNameHex, { from: account })
   if (parseInt(tx.receipt.status, 16) !== 1) {
@@ -134,7 +137,8 @@ export const getReward = async gameName => {
 
 export const revealShape = async gameName => {
   const { secret, account, shape } = gameParameters.get(gameName)
-  const gameNameHex = utils.utf8ToHex(gameName)
+  const web3 = getWeb3()
+  const gameNameHex = web3.toHex(gameName)
   const rps = await getRpsContract()
   const tx = await rps.revealSecret(gameNameHex, shapes[shape], secret, { from: account })
   if (parseInt(tx.receipt.status, 16) !== 1) {

@@ -4,7 +4,7 @@ import { Text, Image } from 'react-native'
 import { Form, Item, Input, Button } from 'native-base'
 import rpsImage from '../../assets/rock-paper-scissors.png'
 import AppLayout from '../layout/AppLayout'
-import { getGameStatus } from '../utils/rpsApi'
+import getUport from '../utils/uport'
 
 class EnterGameName extends Component {
   constructor(props) {
@@ -19,8 +19,8 @@ class EnterGameName extends Component {
   async componentDidMount() {
     this.setState({ pending: true })
     try {
-      const gameStatus = await getGameStatus('a')
-      this.setState({ pending: false, data: gameStatus })
+      const credentials = await getUport().requestCredentials()
+      this.setState({ pending: false, data: JSON.stringify(credentials) })
     } catch (e) {
       this.setState({ pending: false, error: e + '' })
     }
