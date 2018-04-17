@@ -8,6 +8,7 @@
     "prettier": "prettier --write 'src/**/*.js'"
   },
   "dependencies": {
+    "es6-promisify": "^6.0.0",
     "lodash": "4.13.1",
     "native-base": "2.4.1",
     "react": "16.3.1",

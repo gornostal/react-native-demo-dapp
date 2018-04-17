@@ -78,7 +78,7 @@ export const startGame = async formData => {
   const hash = shapeHash(formData.shape, secret)
   const tx = await rps.startGame(gameNameHex, hash, {
     from: formData.fromAccount,
-    value: utils.toWei(formData.bet, 'ether')
+    value: web3.toWei(formData.bet, 'ether')
   })
   if (parseInt(tx.receipt.status, 16) !== 1) {
     console.log('tx', tx)

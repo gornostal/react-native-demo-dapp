@@ -1,10 +1,10 @@
-import React, { Component } from "react"
-import { Text, Image } from "react-native"
+import React, { Component } from 'react'
+import { Text, Image } from 'react-native'
 
-import { Form, Item, Input, Button } from "native-base"
-import rpsImage from "../../assets/rock-paper-scissors.png"
-import AppLayout from "../layout/AppLayout"
-import getUport from "../utils/uport"
+import { Form, Item, Input, Button } from 'native-base'
+import rpsImage from '../../assets/rock-paper-scissors.png'
+import AppLayout from '../layout/AppLayout'
+import { getGameStatus } from '../utils/rpsApi'
 
 class EnterGameName extends Component {
   constructor(props) {
@@ -19,10 +19,10 @@ class EnterGameName extends Component {
   async componentDidMount() {
     this.setState({ pending: true })
     try {
-      const creds = await getUport().requestCredentials()
-      this.setState({ pending: false, data: creds })
+      const status = await getGameStatus('a')
+      this.setState({ pending: false, data: status.toNumber() + '' })
     } catch (e) {
-      this.setState({ pending: false, error: e + "" })
+      this.setState({ pending: false, error: e + '' })
     }
   }
 
@@ -39,8 +39,8 @@ class EnterGameName extends Component {
           </Button>
         </Form>
         {this.state.pending && <Text>Loading...</Text>}
-        {!this.state.pending && !this.state.error && this.state.data && <Text>Data: {this.state.data.name}</Text>}
-        {this.state.error && <Text style={{ color: "red" }}>{this.state.error}</Text>}
+        {!this.state.pending && !this.state.error && this.state.data && <Text>Data: {this.state.data}</Text>}
+        {this.state.error && <Text style={{ color: 'red' }}>{this.state.error}</Text>}
       </AppLayout>
     )
   }
@@ -54,10 +54,10 @@ const styles = {
     height: 100,
     marginTop: 30,
     marginBottom: 20,
-    resizeMode: "contain",
-    alignSelf: "center"
+    resizeMode: 'contain',
+    alignSelf: 'center'
   },
   submitBtn: {
-    color: "#fff"
+    color: '#fff'
   }
 }

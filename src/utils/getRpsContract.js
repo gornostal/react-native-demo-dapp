@@ -1,3 +1,5 @@
+import { promisify } from 'es6-promisify'
+
 import rpsContractJson from '../contracts/Rps.json'
 import getWeb3 from './getWeb3'
 
@@ -12,15 +14,7 @@ export class RpsContract {
   }
 
   getGameStatus(gameName) {
-    return new Promise((resolve, reject) => {
-      this.contract.getGameStatus(gameName, (err, result) => {
-        if (err) {
-          return reject(err)
-        }
-
-        resolve(result.toNumber())
-      })
-    })
+    return promisify(this.contract.getGameStatus.bind(this.contract))(gameName)
   }
 }
 
