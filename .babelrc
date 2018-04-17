@@ -1,3 +1,3 @@
 {
-  "presets": ["react-native", "babel-preset-react-native-web3"]
+  "presets": ["react-native", "react-native-uport-connect/babel-preset", "babel-preset-react-native-web3"]
 }

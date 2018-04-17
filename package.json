@@ -13,6 +13,7 @@
     "react": "16.3.1",
     "react-native": "0.55.2",
     "react-native-hyperlink": "^0.0.12",
+    "react-native-uport-connect": "^0.1.1",
     "react-navigation": "1.5.0",
     "react-redux": "^5.0.7",
     "redux": "^3.7.2",

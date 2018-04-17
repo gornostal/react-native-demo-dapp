@@ -4,7 +4,7 @@ import { Text, Image } from "react-native"
 import { Form, Item, Input, Button } from "native-base"
 import rpsImage from "../../assets/rock-paper-scissors.png"
 import AppLayout from "../layout/AppLayout"
-import getWeb3 from "../utils/getWeb3"
+import getUport from "../utils/uport"
 
 class EnterGameName extends Component {
   constructor(props) {
@@ -19,12 +19,8 @@ class EnterGameName extends Component {
   async componentDidMount() {
     this.setState({ pending: true })
     try {
-      getWeb3().eth.getBlock("latest", (err, block) => {
-        if (err) {
-          return this.setState({ pending: false, error: `Error ${err}` })
-        }
-        this.setState({ pending: false, data: block.number })
-      })
+      const creds = await getUport().requestCredentials()
+      this.setState({ pending: false, data: creds })
     } catch (e) {
       this.setState({ pending: false, error: e + "" })
     }
@@ -43,7 +39,7 @@ class EnterGameName extends Component {
           </Button>
         </Form>
         {this.state.pending && <Text>Loading...</Text>}
-        {!this.state.pending && !this.state.error && <Text>Data: {this.state.data}</Text>}
+        {!this.state.pending && !this.state.error && this.state.data && <Text>Data: {this.state.data.name}</Text>}
         {this.state.error && <Text style={{ color: "red" }}>{this.state.error}</Text>}
       </AppLayout>
     )
