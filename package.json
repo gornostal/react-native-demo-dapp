@@ -4,17 +4,29 @@
   "private": true,
   "scripts": {
     "start": "node node_modules/react-native/local-cli/cli.js start",
-    "test": "jest"
+    "test": "jest",
+    "prettier": "prettier --write 'src/**/*.js'"
   },
   "dependencies": {
+    "lodash": "4.13.1",
+    "native-base": "2.4.1",
     "react": "16.3.1",
-    "react-native": "0.55.2"
+    "react-native": "0.55.2",
+    "react-native-hyperlink": "^0.0.12",
+    "react-navigation": "1.5.0",
+    "react-redux": "^5.0.7",
+    "redux": "^3.7.2",
+    "web3": "^0.20.6"
   },
   "devDependencies": {
     "babel-jest": "22.4.3",
     "babel-preset-react-native": "4.0.0",
+    "babel-preset-react-native-web3": "^0.0.4",
     "jest": "22.4.3",
-    "react-test-renderer": "16.3.1"
+    "prettier": "^1.12.1",
+    "react-test-renderer": "16.3.1",
+    "truffle": "^4.1.6",
+    "truffle-hdwallet-provider": "^0.0.3"
   },
   "jest": {
     "preset": "react-native"

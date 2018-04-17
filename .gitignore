@@ -54,3 +54,8 @@ buck-out/
 
 # Bundle artifact
 *.jsbundle
+
+
+yarn-error.log
+/src/contracts/*.json
+/ethereum/build
