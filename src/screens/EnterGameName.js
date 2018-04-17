@@ -1,32 +1,16 @@
 import React, { Component } from 'react'
 import { Text, Image } from 'react-native'
-
+import { bindActionCreators } from 'redux'
+import { connect } from 'react-redux'
 import { Form, Item, Input, Button } from 'native-base'
+
 import rpsImage from '../../assets/rock-paper-scissors.png'
 import AppLayout from '../layout/AppLayout'
-import { getGameStatus } from '../utils/rpsApi'
+import { loadCredentials } from '../uport/uportActions'
 
 class EnterGameName extends Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      pending: false,
-      data: null,
-      error: null
-    }
-  }
-
-  async componentDidMount() {
-    this.setState({ pending: true })
-    try {
-      const status = await getGameStatus('a')
-      this.setState({ pending: false, data: status.toNumber() + '' })
-    } catch (e) {
-      this.setState({ pending: false, error: e + '' })
-    }
-  }
-
   render() {
+    // TODO: show loading, and uport screen if there are no credentials
     return (
       <AppLayout title="Create or join a game">
         <Image style={styles.image} source={rpsImage} />
@@ -38,15 +22,20 @@ class EnterGameName extends Component {
             <Text style={styles.submitBtn}>Submit</Text>
           </Button>
         </Form>
-        {this.state.pending && <Text>Loading...</Text>}
-        {!this.state.pending && !this.state.error && this.state.data && <Text>Data: {this.state.data}</Text>}
-        {this.state.error && <Text style={{ color: 'red' }}>{this.state.error}</Text>}
       </AppLayout>
     )
   }
 }
 
-export default EnterGameName
+const mapStateToProps = state => ({
+  credentials: state.uport.credentials
+})
+
+const mapDispatchToProps = dispatch => ({
+  actions: bindActionCreators({ loadCredentials }, dispatch)
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(EnterGameName)
 
 const styles = {
   image: {

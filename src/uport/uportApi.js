@@ -1,12 +1,27 @@
+import { AsyncStorage } from 'react-native'
 import configureUportConnect from 'react-native-uport-connect'
 
 class Uport {
+  credStorageKey = 'uport:credentials'
+
   constructor(config) {
     const { uport, MNID } = configureUportConnect(config)
     this.connection = uport
     this.MNID = MNID
   }
 
+  /**
+   * Loads previously requested credentials from AsyncStorage
+   */
+  async loadCredentials() {
+    const credentials = await AsyncStorage.getItem(this.credStorageKey)
+    return credentials ? JSON.parse(credentials) : null
+  }
+
+  /**
+   * Triggers Uport Request Credentials flow
+   * and saves them to AsyncStorage
+   */
   async requestCredentials() {
     var resp
     try {
@@ -19,7 +34,9 @@ class Uport {
         throw e
       }
     }
-    return { ...resp, ethAddress: this.MNID.decode(resp.address).address }
+    const credentials = { ...resp, ethAddress: this.MNID.decode(resp.address).address }
+    await AsyncStorage.setItem(this.credStorageKey, JSON.stringify(credentials))
+    return credentials
   }
 }
 
