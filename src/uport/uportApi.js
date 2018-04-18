@@ -1,7 +1,9 @@
-import { AsyncStorage } from 'react-native'
+import AsyncStorage from 'rn-async-storage'
 import configureUportConnect from 'react-native-uport-connect'
 
-class Uport {
+import dummyCredentials from './dummyCredentials.json'
+
+export class Uport {
   credStorageKey = 'uport:credentials'
 
   constructor(config) {
@@ -12,17 +14,36 @@ class Uport {
 
   /**
    * Loads previously requested credentials from AsyncStorage
+   * Returns either credentials or an empty object
    */
   async loadCredentials() {
     const credentials = await AsyncStorage.getItem(this.credStorageKey)
+    console.log(credentials)
     return credentials ? JSON.parse(credentials) : null
+  }
+
+  async clearCredentials() {
+    await AsyncStorage.setItem(this.credStorageKey, '')
+  }
+
+  /**
+   * Temporary method
+   */
+  requestCredentials() {
+    return new Promise(resolve => {
+      setTimeout(async () => {
+        const credentials = dummyCredentials
+        await AsyncStorage.setItem(this.credStorageKey, JSON.stringify(credentials))
+        resolve(credentials)
+      }, 7e3)
+    })
   }
 
   /**
    * Triggers Uport Request Credentials flow
    * and saves them to AsyncStorage
    */
-  async requestCredentials() {
+  async XrequestCredentials() {
     var resp
     try {
       resp = await this.connection.requestCredentials({ requested: ['name', 'avatar'] })
@@ -41,7 +62,7 @@ class Uport {
 }
 
 var uportInstance = null
-const getUport = () => {
+export const getUport = () => {
   if (uportInstance) {
     return uportInstance
   }
@@ -53,5 +74,3 @@ const getUport = () => {
   })
   return uportInstance
 }
-
-export default getUport

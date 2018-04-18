@@ -1,9 +1,12 @@
 import React, { Component } from 'react'
 import { compose } from 'redux'
+import { bindActionCreators } from 'redux'
+import { connect } from 'react-redux'
 import { withNavigation } from 'react-navigation'
 import { Button, Icon, Footer, FooterTab, Text } from 'native-base'
 
 import withKeyboardState from '../utils/withKeyboardState'
+import { actions } from '../uport/uportActions'
 
 const footerButtons = [
   {
@@ -20,7 +23,7 @@ const footerButtons = [
 
 class FooterNavigation extends Component {
   render() {
-    const { isKeyboardVisible, navigation } = this.props
+    const { isKeyboardVisible, navigation, credentials, actions } = this.props
     if (isKeyboardVisible) {
       return null
     }
@@ -39,10 +42,27 @@ class FooterNavigation extends Component {
               <Text>{item.text}</Text>
             </Button>
           ))}
+          {credentials.payload &&
+            credentials.payload.name && (
+              <Button onPress={actions.clearCredentials} vertical>
+                <Icon type="FontAwesome" name="sign-out" />
+                <Text>Sign Out</Text>
+              </Button>
+            )}
         </FooterTab>
       </Footer>
     )
   }
 }
 
-export default compose(withKeyboardState, withNavigation)(FooterNavigation)
+const mapStateToProps = state => ({
+  credentials: state.uport.credentials
+})
+
+const mapDispatchToProps = dispatch => ({
+  actions: bindActionCreators(actions, dispatch)
+})
+
+export default compose(connect(mapStateToProps, mapDispatchToProps), withKeyboardState, withNavigation)(
+  FooterNavigation
+)

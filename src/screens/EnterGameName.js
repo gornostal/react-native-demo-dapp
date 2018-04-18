@@ -6,11 +6,31 @@ import { Form, Item, Input, Button } from 'native-base'
 
 import rpsImage from '../../assets/rock-paper-scissors.png'
 import AppLayout from '../layout/AppLayout'
-import { loadCredentials } from '../uport/uportActions'
+import LoadingScreen from '../layout/LoadingScreen'
+import { actions } from '../uport/uportActions'
+import UportConnect from './UportConnect'
 
 class EnterGameName extends Component {
+  constructor(props) {
+    super(props)
+    this.state = { beforeLoadCredentials: true }
+  }
+
+  componentDidMount() {
+    this.props.actions.loadCredentials()
+    this.setState({ beforeLoadCredentials: false })
+  }
+
   render() {
-    // TODO: show loading, and uport screen if there are no credentials
+    const { credentials } = this.props
+    if (credentials.pending || this.state.beforeLoadCredentials) {
+      return <LoadingScreen />
+    }
+
+    if (!credentials.payload) {
+      return <UportConnect />
+    }
+
     return (
       <AppLayout title="Create or join a game">
         <Image style={styles.image} source={rpsImage} />
@@ -21,6 +41,7 @@ class EnterGameName extends Component {
           <Button block primary>
             <Text style={styles.submitBtn}>Submit</Text>
           </Button>
+          <Text>Name: {credentials.payload.name}</Text>
         </Form>
       </AppLayout>
     )
@@ -32,7 +53,7 @@ const mapStateToProps = state => ({
 })
 
 const mapDispatchToProps = dispatch => ({
-  actions: bindActionCreators({ loadCredentials }, dispatch)
+  actions: bindActionCreators(actions, dispatch)
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(EnterGameName)

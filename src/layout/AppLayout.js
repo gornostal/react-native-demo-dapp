@@ -5,7 +5,7 @@ import FooterNavigation from './FooterNavigation'
 
 export default class AppLayout extends Component {
   render() {
-    const { title, children } = this.props
+    const { title, children, contentStyle } = this.props
     return (
       <Container>
         <Header>
@@ -13,7 +13,9 @@ export default class AppLayout extends Component {
             <Title>{title}</Title>
           </Body>
         </Header>
-        <Content padder>{children}</Content>
+        <Content contentContainerStyle={contentStyle} padder>
+          {children}
+        </Content>
         <FooterNavigation />
       </Container>
     )
