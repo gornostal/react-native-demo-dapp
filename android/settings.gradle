@@ -1,3 +1,5 @@
 rootProject.name = 'ReactNativeDemoDApp'
+include ':rn-async-storage'
+project(':rn-async-storage').projectDir = new File(rootProject.projectDir, '../node_modules/rn-async-storage/android')
 
 include ':app'

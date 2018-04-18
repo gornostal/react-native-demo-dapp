@@ -5627,6 +5627,10 @@ realpath-native@^1.0.0:
   dependencies:
     util.promisify "^1.0.0"
 
+redux-promise-middleware@^5.0.0:
+  version "5.0.0"
+  resolved "https://registry.yarnpkg.com/redux-promise-middleware/-/redux-promise-middleware-5.0.0.tgz#1656b24f9ac962bf11fbe55ea8360810e18d47a7"
+
 redux@^3.7.2:
   version "3.7.2"
   resolved "https://registry.yarnpkg.com/redux/-/redux-3.7.2.tgz#06b73123215901d25d065be342eb026bc1c8537b"
@@ -5868,6 +5872,10 @@ ripemd160@^2.0.0, ripemd160@^2.0.1:
 rlp@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/rlp/-/rlp-2.0.0.tgz#9db384ff4b89a8f61563d92395d8625b18f3afb0"
+
+rn-async-storage@^1.0.22:
+  version "1.0.22"
+  resolved "https://registry.yarnpkg.com/rn-async-storage/-/rn-async-storage-1.0.22.tgz#f239753fd9ea564e764d66f0dd6d5a93581510f0"
 
 run-async@^2.2.0:
   version "2.3.0"

@@ -18,6 +18,8 @@
     "react-navigation": "1.5.0",
     "react-redux": "^5.0.7",
     "redux": "^3.7.2",
+    "redux-promise-middleware": "^5.0.0",
+    "rn-async-storage": "^1.0.22",
     "web3": "^0.20.6"
   },
   "devDependencies": {
