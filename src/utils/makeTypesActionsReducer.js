@@ -1,5 +1,6 @@
 export default function make(typePrefix, requestFn) {
   const initState = {
+    initialized: false,
     fetching: false,
     payload: null,
     error: null
@@ -35,7 +36,7 @@ export default function make(typePrefix, requestFn) {
   const reducer = (state = initState, action) => {
     switch (action.type) {
       case `${types.ASYNC_REQUEST}_PENDING`:
-        const newState = { ...state, fetching: true }
+        const newState = { ...state, fetching: true, initialized: true }
         if (!action.meta.preservePayload) {
           newState.payload = null
         }

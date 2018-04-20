@@ -3,8 +3,8 @@ import { Spinner } from 'native-base'
 
 import AppLayout from './AppLayout'
 
-const LoadingScreen = ({ title }) => (
-  <AppLayout title={title || 'Loading...'}>
+const LoadingScreen = ({ title, noFooter }) => (
+  <AppLayout title={title || 'Loading...'} noFooter={noFooter}>
     <Spinner />
   </AppLayout>
 )

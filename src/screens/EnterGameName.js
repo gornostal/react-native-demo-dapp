@@ -1,25 +1,16 @@
 import React, { Component } from 'react'
 import { Text, Image, Keyboard } from 'react-native'
-import { bindActionCreators } from 'redux'
-import { connect } from 'react-redux'
 import { Form, Item, Input, Button } from 'native-base'
 
 import rpsImage from '../../assets/rock-paper-scissors.png'
 import AppLayout from '../layout/AppLayout'
-import LoadingScreen from '../layout/LoadingScreen'
-import { actions } from '../uport/uportActions'
+import withCredentials from '../uport/withCredentials'
 import UportConnect from './UportConnect'
 
 class EnterGameName extends Component {
   constructor(props) {
     super(props)
     this.onSubmit = this.onSubmit.bind(this)
-    this.state = { beforeLoadCredentials: true, gameName: '' }
-  }
-
-  componentDidMount() {
-    this.props.actions.loadCredentials()
-    this.setState({ beforeLoadCredentials: false })
   }
 
   onSubmit() {
@@ -29,11 +20,8 @@ class EnterGameName extends Component {
 
   render() {
     const { credentials } = this.props
-    if (credentials.pending || this.state.beforeLoadCredentials) {
-      return <LoadingScreen />
-    }
 
-    if (!credentials.payload) {
+    if (!credentials) {
       return <UportConnect />
     }
 
@@ -53,15 +41,7 @@ class EnterGameName extends Component {
   }
 }
 
-const mapStateToProps = state => ({
-  credentials: state.uport.credentials
-})
-
-const mapDispatchToProps = dispatch => ({
-  actions: bindActionCreators(actions, dispatch)
-})
-
-export default connect(mapStateToProps, mapDispatchToProps)(EnterGameName)
+export default withCredentials(EnterGameName)
 
 const styles = {
   image: {

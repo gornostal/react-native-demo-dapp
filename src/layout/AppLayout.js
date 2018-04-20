@@ -5,7 +5,7 @@ import FooterNavigation from './FooterNavigation'
 
 export default class AppLayout extends Component {
   render() {
-    const { title, children, contentStyle } = this.props
+    const { title, children, contentStyle, noFooter } = this.props
     return (
       <Container>
         <Header>
@@ -16,7 +16,7 @@ export default class AppLayout extends Component {
         <Content contentContainerStyle={contentStyle} padder>
           {children}
         </Content>
-        <FooterNavigation />
+        {!noFooter && <FooterNavigation />}
       </Container>
     )
   }

@@ -3,6 +3,7 @@ import { getUport } from './uportApi'
 
 const initState = {
   fetching: false,
+  initialized: false,
   payload: null,
   error: null
 }
@@ -42,7 +43,7 @@ const credentialsReducer = (state = initState, action) => {
     case `${types.LOAD_CREDENTIALS}_PENDING`:
     case `${types.REQUEST_CREDENTIALS}_PENDING`:
     case `${types.CLEAR_CREDENTIALS}_PENDING`:
-      return { ...state, fetching: true }
+      return { ...state, fetching: true, initialized: true }
 
     case `${types.LOAD_CREDENTIALS}_REJECTED`:
     case `${types.REQUEST_CREDENTIALS}_REJECTED`:

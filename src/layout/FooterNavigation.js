@@ -7,6 +7,7 @@ import { Button, Icon, Footer, FooterTab, Text } from 'native-base'
 
 import withKeyboardState from '../utils/withKeyboardState'
 import { actions } from '../uport/uportActions'
+import withCredentials from '../uport/withCredentials'
 
 const footerButtons = [
   {
@@ -42,27 +43,22 @@ class FooterNavigation extends Component {
               <Text>{item.text}</Text>
             </Button>
           ))}
-          {credentials.payload &&
-            credentials.payload.name && (
-              <Button onPress={actions.clearCredentials} vertical>
-                <Icon type="FontAwesome" name="sign-out" />
-                <Text>Sign Out</Text>
-              </Button>
-            )}
+          {credentials && (
+            <Button onPress={actions.clearCredentials} vertical>
+              <Icon type="FontAwesome" name="sign-out" />
+              <Text>Sign Out</Text>
+            </Button>
+          )}
         </FooterTab>
       </Footer>
     )
   }
 }
 
-const mapStateToProps = state => ({
-  credentials: state.uport.credentials
-})
-
 const mapDispatchToProps = dispatch => ({
   actions: bindActionCreators(actions, dispatch)
 })
 
-export default compose(connect(mapStateToProps, mapDispatchToProps), withKeyboardState, withNavigation)(
+export default compose(connect(null, mapDispatchToProps), withCredentials, withKeyboardState, withNavigation)(
   FooterNavigation
 )

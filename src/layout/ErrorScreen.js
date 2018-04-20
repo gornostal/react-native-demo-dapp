@@ -4,8 +4,8 @@ import { H1 } from 'native-base'
 
 import AppLayout from './AppLayout'
 
-const ErrorScreen = ({ title, children, error }) => (
-  <AppLayout title={title || 'Error'}>
+const ErrorScreen = ({ title, children, error, noFooter }) => (
+  <AppLayout title={title || 'Error'} noFooter={noFooter}>
     <View style={{ alignSelf: 'auto' }}>
       {title && <H1 style={{ marginBottom: 20 }}>Error</H1>}
       {children}

@@ -20,7 +20,9 @@ export default function withGameStatus(WrappedComponent) {
     }
 
     componentDidMount() {
-      this.refreshGameStatus()
+      if (!this.props.gameStatus.initialized) {
+        this.refreshGameStatus()
+      }
     }
 
     getGameName() {

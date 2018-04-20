@@ -17,7 +17,8 @@ const AppNavigator = StackNavigator(
     About: { screen: About }
   },
   {
-    initialRouteName: 'EnterGameName',
+    initialRouteName: 'GameWizard',
+    initialRouteParams: { gameName: 'abc' },
     headerMode: 'none',
     // disable animations
     transitionConfig: () => ({ screenInterpolator: () => null })

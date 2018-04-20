@@ -1,4 +1,6 @@
+import { SubmissionError } from 'redux-form'
 import DefaultPreference from 'react-native-default-preference'
+
 import getWeb3 from '../utils/getWeb3'
 import getRpsContract from './getRpsContract'
 
@@ -60,14 +62,14 @@ export const startGame = async formData => {
   }
 
   if (Object.keys(errors).length > 0) {
-    throw new Error({ ...errors, _error: 'Please fix the errors' })
+    throw new SubmissionError({ ...errors, _error: 'Please fix the errors' })
   }
 
   const web3 = getWeb3()
   const gameNameHex = web3.toHex(formData.gameName)
   const status = (await getGameStatus(formData.gameName)).toNumber()
   if (status !== GameStatus.notStarted) {
-    throw new Error({
+    throw new SubmissionError({
       gameName: 'This game name was already used. Please choose another one',
       _error: 'Please fix the error'
     })
@@ -82,7 +84,7 @@ export const startGame = async formData => {
   })
   if (parseInt(tx.receipt.status, 16) !== 1) {
     console.log('tx', tx)
-    throw new Error({ _error: 'Transaction error. Check the logs' })
+    throw new SubmissionError({ _error: 'Transaction error. Check the logs' })
   }
 }
 
@@ -96,12 +98,12 @@ export const joinGame = async formData => {
   }
 
   if (Object.keys(errors).length > 0) {
-    throw new Error({ ...errors, _error: 'Please fix the errors' })
+    throw new SubmissionError({ ...errors, _error: 'Please fix the errors' })
   }
 
   const status = (await getGameStatus(formData.gameName)).toNumber()
   if (status !== GameStatus.choosing) {
-    throw new Error({
+    throw new SubmissionError({
       gameName: 'This game cannot be joined'
     })
   }
@@ -117,7 +119,7 @@ export const joinGame = async formData => {
   })
   if (parseInt(tx.receipt.status, 16) !== 1) {
     console.log('tx', tx)
-    throw new Error({ _error: 'Transaction error. Check the logs' })
+    throw new SubmissionError({ _error: 'Transaction error. Check the logs' })
   }
 }
 
