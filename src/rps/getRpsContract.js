@@ -1,7 +1,7 @@
 import { promisify } from 'es6-promisify'
 
 import rpsContractJson from '../contracts/Rps.json'
-import getWeb3 from './getWeb3'
+import getWeb3 from '../utils/getWeb3'
 
 var contractInstance = null
 

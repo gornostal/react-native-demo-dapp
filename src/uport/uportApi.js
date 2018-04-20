@@ -1,4 +1,4 @@
-import AsyncStorage from 'rn-async-storage'
+import DefaultPreference from 'react-native-default-preference'
 import configureUportConnect from 'react-native-uport-connect'
 
 import dummyCredentials from './dummyCredentials.json'
@@ -13,17 +13,16 @@ export class Uport {
   }
 
   /**
-   * Loads previously requested credentials from AsyncStorage
+   * Loads previously requested credentials from DefaultPreference
    * Returns either credentials or an empty object
    */
   async loadCredentials() {
-    const credentials = await AsyncStorage.getItem(this.credStorageKey)
-    console.log(credentials)
+    const credentials = await DefaultPreference.get(this.credStorageKey)
     return credentials ? JSON.parse(credentials) : null
   }
 
   async clearCredentials() {
-    await AsyncStorage.setItem(this.credStorageKey, '')
+    await DefaultPreference.clear(this.credStorageKey)
   }
 
   /**
@@ -33,7 +32,7 @@ export class Uport {
     return new Promise(resolve => {
       setTimeout(async () => {
         const credentials = dummyCredentials
-        await AsyncStorage.setItem(this.credStorageKey, JSON.stringify(credentials))
+        await DefaultPreference.set(this.credStorageKey, JSON.stringify(credentials))
         resolve(credentials)
       }, 7e3)
     })
@@ -41,7 +40,7 @@ export class Uport {
 
   /**
    * Triggers Uport Request Credentials flow
-   * and saves them to AsyncStorage
+   * and saves them to DefaultPreference
    */
   async XrequestCredentials() {
     var resp
@@ -56,7 +55,7 @@ export class Uport {
       }
     }
     const credentials = { ...resp, ethAddress: this.MNID.decode(resp.address).address }
-    await AsyncStorage.setItem(this.credStorageKey, JSON.stringify(credentials))
+    await DefaultPreference.set(this.credStorageKey, JSON.stringify(credentials))
     return credentials
   }
 }

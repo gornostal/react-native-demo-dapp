@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Text, Image } from 'react-native'
+import { Text, Image, Keyboard } from 'react-native'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { Form, Item, Input, Button } from 'native-base'
@@ -13,12 +13,18 @@ import UportConnect from './UportConnect'
 class EnterGameName extends Component {
   constructor(props) {
     super(props)
-    this.state = { beforeLoadCredentials: true }
+    this.onSubmit = this.onSubmit.bind(this)
+    this.state = { beforeLoadCredentials: true, gameName: '' }
   }
 
   componentDidMount() {
     this.props.actions.loadCredentials()
     this.setState({ beforeLoadCredentials: false })
+  }
+
+  onSubmit() {
+    Keyboard.dismiss()
+    this.props.navigation.navigate('GameWizard', { gameName: this.state.gameName })
   }
 
   render() {
@@ -36,12 +42,11 @@ class EnterGameName extends Component {
         <Image style={styles.image} source={rpsImage} />
         <Form>
           <Item>
-            <Input placeholder="Game name" />
+            <Input autoFocus placeholder="Game name" onChangeText={gameName => this.setState({ gameName })} />
           </Item>
-          <Button block primary>
-            <Text style={styles.submitBtn}>Submit</Text>
+          <Button block primary onPress={this.onSubmit}>
+            <Text style={styles.submitBtn}>Go</Text>
           </Button>
-          <Text>Name: {credentials.payload.name}</Text>
         </Form>
       </AppLayout>
     )

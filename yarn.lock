@@ -5349,6 +5349,10 @@ react-is@^16.3.1:
   version "16.3.1"
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-16.3.1.tgz#ee66e6d8283224a83b3030e110056798488359ba"
 
+react-native-default-preference@^1.3.1:
+  version "1.3.1"
+  resolved "https://registry.yarnpkg.com/react-native-default-preference/-/react-native-default-preference-1.3.1.tgz#5eeb415bdc71334e39d7837a0399dee1169a832e"
+
 react-native-dismiss-keyboard@1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/react-native-dismiss-keyboard/-/react-native-dismiss-keyboard-1.0.0.tgz#32886242b3f2317e121f3aeb9b0a585e2b879b49"
@@ -5872,10 +5876,6 @@ ripemd160@^2.0.0, ripemd160@^2.0.1:
 rlp@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/rlp/-/rlp-2.0.0.tgz#9db384ff4b89a8f61563d92395d8625b18f3afb0"
-
-rn-async-storage@^1.0.22:
-  version "1.0.22"
-  resolved "https://registry.yarnpkg.com/rn-async-storage/-/rn-async-storage-1.0.22.tgz#f239753fd9ea564e764d66f0dd6d5a93581510f0"
 
 run-async@^2.2.0:
   version "2.3.0"

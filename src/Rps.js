@@ -7,11 +7,13 @@ import promiseMiddleware from 'redux-promise-middleware'
 
 import reducer from './reducers'
 import EnterGameName from './screens/EnterGameName'
+import GameWizard from './screens/GameWizard'
 import About from './screens/About'
 
 const AppNavigator = StackNavigator(
   {
     EnterGameName: { screen: EnterGameName },
+    GameWizard: { screen: GameWizard },
     About: { screen: About }
   },
   {

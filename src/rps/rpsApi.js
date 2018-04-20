@@ -1,5 +1,5 @@
-import { utils } from 'web3'
-import getWeb3 from './getWeb3'
+import DefaultPreference from 'react-native-default-preference'
+import getWeb3 from '../utils/getWeb3'
 import getRpsContract from './getRpsContract'
 
 const shapes = {
@@ -154,7 +154,7 @@ function shapeHash(shape, secret) {
 }
 
 export const gameParameters = {
-  save(gameName, account, shape) {
+  async save(gameName, account, shape) {
     const storageKey = `game-secret-${gameName}`
     const data = {
       secret: utils.randomHex(32),
@@ -163,18 +163,19 @@ export const gameParameters = {
       revealed: false,
       rewarded: false
     }
-    localStorage.setItem(storageKey, JSON.stringify(data))
+    await DefaultPreference.set(storageKey, JSON.stringify(data))
     return data
   },
-  get(gameName) {
+  async get(gameName) {
     const storageKey = `game-secret-${gameName}`
-    if (!localStorage.getItem(storageKey)) {
+    const game = await DefaultPreference.get(storageKey)
+    if (!game) {
       return
     }
 
-    return JSON.parse(localStorage.getItem(storageKey))
+    return JSON.parse(game)
   },
-  update(gameName, updates) {
+  async update(gameName, updates) {
     const params = gameParameters.get(gameName)
     if (!params) {
       throw new Error('Invalid game name')
@@ -182,11 +183,11 @@ export const gameParameters = {
 
     const newParams = { ...params, ...updates }
     const storageKey = `game-secret-${gameName}`
-    localStorage.setItem(storageKey, JSON.stringify(newParams))
+    await DefaultPreference.set(storageKey, JSON.stringify(newParams))
     return newParams
   },
-  remove(gameName) {
+  async remove(gameName) {
     const storageKey = `game-secret-${gameName}`
-    localStorage.removeItem(storageKey)
+    await DefaultPreference.clear(storageKey)
   }
 }
