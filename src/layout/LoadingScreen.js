@@ -1,13 +1,11 @@
 import React from 'react'
-import { Text, View } from 'react-native'
+import { Spinner } from 'native-base'
 
 import AppLayout from './AppLayout'
 
-const LoadingScreen = () => (
-  <AppLayout>
-    <View style={{ alignSelf: 'auto' }}>
-      <Text>Loading...</Text>
-    </View>
+const LoadingScreen = ({ title }) => (
+  <AppLayout title={title || 'Loading...'}>
+    <Spinner />
   </AppLayout>
 )
 
