@@ -7,7 +7,7 @@ const getWeb3 = () => {
     return cachedWeb3
   }
 
-  const provider = new Web3.providers.HttpProvider('https://rinkeby.infura.io/8A9p9cVJZyAUqYODl5Fq')
+  const provider = new Web3.providers.HttpProvider('http://192.168.88.244:8545')
   cachedWeb3 = new Web3(provider)
 
   return cachedWeb3
