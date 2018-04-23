@@ -1,12 +1,12 @@
 import React from 'react'
 import { Field } from 'redux-form'
 import { Text, View } from 'react-native'
-import { Item, Picker, Input, Label, Icon } from 'native-base'
+import { Item, Picker, Input, Label, IconNB } from 'native-base'
 
 const parseNumber = value => Number(value)
 
 const ReactNativeInput = ({ input, label, meta, disabled, placeholder, comment }) => (
-  <Item stackedLabel error={meta.error}>
+  <Item stackedLabel error={!!meta.error}>
     <Label>{label}</Label>
     <Input
       defaultValue={input.value}
@@ -16,7 +16,6 @@ const ReactNativeInput = ({ input, label, meta, disabled, placeholder, comment }
       onFocus={input.onFocus}
       placeholder={placeholder}
     />
-    {meta.error && <Icon name="close-circle" />}
     {(meta.error || comment) && <Text>{meta.error || comment}</Text>}
   </Item>
 )
@@ -39,7 +38,7 @@ const ReactNativePicker = ({ options, input, label, meta, disabled, placeholder,
     >
       {options.map(({ value, displayValue }) => <Item key={value} label={displayValue} value={value} />)}
     </Picker>
-    {meta.error && <Icon name="close-circle" />}
+    {meta.error && <IconNB name="close-circle" />}
     {(meta.error || comment) && <Text>{meta.error || comment}</Text>}
   </View>
 )

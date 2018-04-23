@@ -76,7 +76,7 @@ export const startGame = async formData => {
   }
 
   const rps = await getRpsContract()
-  const { secret } = gameParameters.save(formData.gameName, formData.fromAccount, formData.shape)
+  const { secret } = await gameParameters.save(formData.gameName, formData.fromAccount, formData.shape)
   const hash = shapeHash(formData.shape, secret)
   const tx = await rps.startGame(gameNameHex, hash, {
     from: formData.fromAccount,
