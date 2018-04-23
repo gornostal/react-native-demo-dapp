@@ -1,5 +1,6 @@
 import { SubmissionError } from 'redux-form'
 import DefaultPreference from 'react-native-default-preference'
+import { generateSecureRandom } from 'react-native-securerandom'
 
 import getWeb3 from '../utils/getWeb3'
 import getRpsContract from './getRpsContract'
@@ -74,6 +75,11 @@ export const startGame = async formData => {
       _error: 'Please fix the error'
     })
   }
+
+  throw new SubmissionError({
+    shape: shapeHash(formData.shape, await randomHex(32)),
+    _error: 'Errors'
+  })
 
   const rps = await getRpsContract()
   const { secret } = await gameParameters.save(formData.gameName, formData.fromAccount, formData.shape)
@@ -152,14 +158,14 @@ export const revealShape = async gameName => {
 }
 
 function shapeHash(shape, secret) {
-  return utils.soliditySha3({ t: 'uint8', v: shapes[shape] }, { t: 'bytes32', v: secret })
+  return getWeb3().sha3({ t: 'uint8', v: shapes[shape] }, { t: 'bytes32', v: secret })
 }
 
 export const gameParameters = {
   async save(gameName, account, shape) {
     const storageKey = `game-secret-${gameName}`
     const data = {
-      secret: utils.randomHex(32),
+      secret: await randomHex(32),
       account,
       shape,
       revealed: false,
@@ -192,4 +198,9 @@ export const gameParameters = {
     const storageKey = `game-secret-${gameName}`
     await DefaultPreference.clear(storageKey)
   }
+}
+
+async function randomHex(length) {
+  const rand = await generateSecureRandom(10)
+  return getWeb3().toHex(rand).substr(0, length)
 }
