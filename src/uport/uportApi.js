@@ -10,6 +10,12 @@ export class Uport {
     const { uport, MNID } = configureUportConnect(config)
     this.connection = uport
     this.MNID = MNID
+    this.web3 = uport.getWeb3()
+  }
+
+  getContractInstance(abi, address) {
+    const Contract = this.web3.eth.contract(abi)
+    return Contract.at(address)
   }
 
   /**
@@ -28,7 +34,7 @@ export class Uport {
   /**
    * Temporary method
    */
-  requestCredentials() {
+  XrequestCredentials() {
     return new Promise(resolve => {
       setTimeout(async () => {
         const credentials = dummyCredentials
@@ -42,7 +48,7 @@ export class Uport {
    * Triggers Uport Request Credentials flow
    * and saves them to DefaultPreference
    */
-  async XrequestCredentials() {
+  async requestCredentials() {
     var resp
     try {
       resp = await this.connection.requestCredentials({ requested: ['name', 'avatar'] })

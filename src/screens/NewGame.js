@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { Keyboard, Text } from 'react-native'
-import { Button, Form } from 'native-base'
+import { Button, Form, Toast } from 'native-base'
 import { compose } from 'redux'
 import { connect } from 'react-redux'
 import { reduxForm, getFormValues } from 'redux-form'
@@ -26,6 +26,13 @@ class NewGame extends Component {
   componentWillReceiveProps(newProps) {
     if (newProps.submitSucceeded) {
       newProps.refreshGameStatus()
+    }
+    if (!this.props.error && newProps.error) {
+      Toast.show({
+        text: newProps.error,
+        type: 'warning',
+        buttonText: 'Okay'
+      })
     }
   }
 
@@ -56,7 +63,9 @@ class NewGame extends Component {
 const mapStateToProps = (state, ownProps) => {
   return {
     initialValues: {
-      fromAccount: ownProps.credentials.ethAddress
+      fromAccount: ownProps.credentials.ethAddress,
+      bet: '22',
+      shape: 'scissors'
     },
     formValues: getFormValues('CreateGameForm')(state),
     startGame: makeFormSubmitHandler(startGame)

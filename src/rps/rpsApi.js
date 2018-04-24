@@ -1,6 +1,8 @@
 import { SubmissionError } from 'redux-form'
 import DefaultPreference from 'react-native-default-preference'
+import { generateSecureRandom } from 'react-native-securerandom'
 
+import { uint8ToHex } from '../utils/web3Utils'
 import getWeb3 from '../utils/getWeb3'
 import getRpsContract from './getRpsContract'
 
@@ -78,14 +80,9 @@ export const startGame = async formData => {
   const rps = await getRpsContract()
   const { secret } = await gameParameters.save(formData.gameName, formData.fromAccount, formData.shape)
   const hash = shapeHash(formData.shape, secret)
-  const tx = await rps.startGame(gameNameHex, hash, {
-    from: formData.fromAccount,
-    value: web3.toWei(formData.bet, 'ether')
-  })
-  if (parseInt(tx.receipt.status, 16) !== 1) {
-    console.log('tx', tx)
-    throw new SubmissionError({ _error: 'Transaction error. Check the logs' })
-  }
+  const tx = await rps.startGame(gameNameHex, hash, web3.toWei(formData.bet, 'ether'))
+  console.log('tx', tx)
+  throw new SubmissionError({ _error: 'Transaction error. Check the logs' })
 }
 
 export const joinGame = async formData => {
@@ -152,14 +149,16 @@ export const revealShape = async gameName => {
 }
 
 function shapeHash(shape, secret) {
-  return utils.soliditySha3({ t: 'uint8', v: shapes[shape] }, { t: 'bytes32', v: secret })
+  const shapeHex = uint8ToHex(shapes[shape]).substr(2)
+  const secretHex = secret.substr(2)
+  return getWeb3().sha3(`0x${shapeHex}${secretHex}`, { encoding: 'hex' })
 }
 
 export const gameParameters = {
   async save(gameName, account, shape) {
     const storageKey = `game-secret-${gameName}`
     const data = {
-      secret: utils.randomHex(32),
+      secret: await randomHex(32),
       account,
       shape,
       revealed: false,
@@ -192,4 +191,11 @@ export const gameParameters = {
     const storageKey = `game-secret-${gameName}`
     await DefaultPreference.clear(storageKey)
   }
+}
+
+async function randomHex(length) {
+  const rand = await generateSecureRandom(10)
+  return getWeb3()
+    .toHex(rand)
+    .substr(0, length)
 }

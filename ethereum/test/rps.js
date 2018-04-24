@@ -1,6 +1,7 @@
 /* global artifacts, contract, assert, web3 */
 const Rps = artifacts.require('Rps.sol')
 const Web3 = require('web3')
+const web3Utils = require('../../src/utils/web3Utils')
 
 const web3u = new Web3(web3.currentProvider)
 const shapes = {
@@ -19,15 +20,17 @@ const GameStatus = {
 
 function secretBytes(secret) {
   // get sha3 hash so the return value is 32 bytes long
-  return web3u.utils.sha3(secret)
+  return web3u.sha3(secret)
 }
 
 function gameName(name) {
-  return web3u.utils.utf8ToHex(name)
+  return web3u.toHex(name)
 }
 
 function shapeHash(shape, secret) {
-  return web3u.utils.soliditySha3({ t: 'uint8', v: shapes[shape] }, { t: 'bytes32', v: secretBytes(secret) })
+  const shapeHex = web3Utils.uint8ToHex(shapes[shape]).substr(2)
+  const secretHex = secretBytes(secret).substr(2)
+  return web3u.sha3(`0x${shapeHex}${secretHex}`, { encoding: 'hex' })
 }
 
 function precisionRound(number, precision) {
@@ -196,10 +199,10 @@ contract('Rock Paper Scissors', accounts => {
         from: accounts[1],
         value: web3.toWei(0.1, 'ether')
       })
-      await rps.revealSecret(gameName('newGame'), shapes.rock, web3u.utils.utf8ToHex('secret123'), {
+      await rps.revealSecret(gameName('newGame'), shapes.rock, web3u.toHex('secret123'), {
         from: accounts[0]
       })
-      await rps.revealSecret(gameName('newGame'), shapes.rock, web3u.utils.utf8ToHex('secret234'), {
+      await rps.revealSecret(gameName('newGame'), shapes.rock, web3u.toHex('secret234'), {
         from: accounts[1]
       })
       const result = await rps.getGameStatus(gameName('newGame'))
@@ -216,10 +219,10 @@ contract('Rock Paper Scissors', accounts => {
         from: accounts[1],
         value: web3.toWei(0.1, 'ether')
       })
-      await rps.revealSecret(gameName('newGame'), shapes.rock, web3u.utils.utf8ToHex('abc'), {
+      await rps.revealSecret(gameName('newGame'), shapes.rock, web3u.toHex('abc'), {
         from: accounts[0]
       })
-      await rps.revealSecret(gameName('newGame'), shapes.paper, web3u.utils.utf8ToHex('xyz'), {
+      await rps.revealSecret(gameName('newGame'), shapes.paper, web3u.toHex('xyz'), {
         from: accounts[1]
       })
       const result = await rps.getGameStatus(gameName('newGame'))

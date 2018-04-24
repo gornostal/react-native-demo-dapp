@@ -39,6 +39,7 @@ export default function withGameStatus(WrappedComponent) {
       const { gameStatus, gameInfo } = this.props
 
       if (gameStatus.error || gameInfo.error) {
+        console.log('gameStatus', gameStatus.error)
         return <ErrorScreen>{gameStatus.error || gameInfo.error}</ErrorScreen>
       }
 
