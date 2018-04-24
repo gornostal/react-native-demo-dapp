@@ -81,8 +81,10 @@ export const startGame = async formData => {
   const { secret } = await gameParameters.save(formData.gameName, formData.fromAccount, formData.shape)
   const hash = shapeHash(formData.shape, secret)
   const tx = await rps.startGame(gameNameHex, hash, web3.toWei(formData.bet, 'ether'))
-  console.log('tx', tx)
-  throw new SubmissionError({ _error: 'Transaction error. Check the logs' })
+  if (parseInt(tx.status, 16) !== 1) {
+    console.log('tx', tx)
+    throw new SubmissionError({ _error: 'Transaction error. Check the logs' })
+  }
 }
 
 export const joinGame = async formData => {
@@ -114,7 +116,7 @@ export const joinGame = async formData => {
     from: formData.fromAccount,
     value: formData.betWei
   })
-  if (parseInt(tx.receipt.status, 16) !== 1) {
+  if (parseInt(tx.status, 16) !== 1) {
     console.log('tx', tx)
     throw new SubmissionError({ _error: 'Transaction error. Check the logs' })
   }
@@ -126,7 +128,7 @@ export const getReward = async gameName => {
   const gameNameHex = web3.toHex(gameName)
   const rps = await getRpsContract()
   const tx = await rps.getReward(gameNameHex, { from: account })
-  if (parseInt(tx.receipt.status, 16) !== 1) {
+  if (parseInt(tx.status, 16) !== 1) {
     console.log('tx', tx)
     throw new Error('Transaction error. Check the logs')
   }
@@ -140,7 +142,7 @@ export const revealShape = async gameName => {
   const gameNameHex = web3.toHex(gameName)
   const rps = await getRpsContract()
   const tx = await rps.revealSecret(gameNameHex, shapes[shape], secret, { from: account })
-  if (parseInt(tx.receipt.status, 16) !== 1) {
+  if (parseInt(tx.status, 16) !== 1) {
     console.log('tx', tx)
     throw new Error('Transaction error. Check the logs')
   }
@@ -149,6 +151,7 @@ export const revealShape = async gameName => {
 }
 
 function shapeHash(shape, secret) {
+  console.log('shape', shape, 'secret', secret)
   const shapeHex = uint8ToHex(shapes[shape]).substr(2)
   const secretHex = secret.substr(2)
   return getWeb3().sha3(`0x${shapeHex}${secretHex}`, { encoding: 'hex' })

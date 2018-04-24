@@ -4,6 +4,9 @@ import { getGameStatus } from './rpsApi'
 
 const { actions: gameStatusActions, reducer: gameStatus } = makeTypesActionsReducer('RPS/GET_STATUS', getGameStatus)
 
-export const actions = { getGameStatus: gameStatusActions.asyncRequest }
+export const actions = {
+  getGameStatus: gameStatusActions.asyncRequest,
+  resetGameStatus: gameStatusActions.resetState
+}
 
 export const reducer = combineReducers({ gameStatus })

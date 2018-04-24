@@ -12,13 +12,21 @@ export default function withAsyncData(propName, asyncFn) {
         this.state = { pending: false, error: null, data: null }
       }
 
+      componentWillUnmount() {
+        this.unmounted = true
+      }
+
       async load(...args) {
         this.setState({ pending: true, error: null, data: null })
         try {
           const data = await asyncFn(...args)
-          this.setState({ pending: false, data })
+          if (!this.unmounted) {
+            this.setState({ pending: false, data })
+          }
         } catch (e) {
-          this.setState({ pending: false, error: e })
+          if (!this.unmounted) {
+            this.setState({ pending: false, error: e })
+          }
         }
       }
 

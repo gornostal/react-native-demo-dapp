@@ -16,6 +16,10 @@ export class RpsContract {
     return promisify(this.contract.getGameStatus.bind(this.contract))(gameName)
   }
 
+  getBetValue(gameName) {
+    return promisify(this.contract.getBetValue.bind(this.contract))(gameName)
+  }
+
   async startGame(gameName, hash, betWei) {
     const txHash = await promisify(this.contract.startGame.bind(this.contract))(gameName, hash, { value: betWei })
     return await this._waitForMinedTransaction(txHash)

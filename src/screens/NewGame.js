@@ -29,7 +29,7 @@ class NewGame extends Component {
     }
     if (!this.props.error && newProps.error) {
       Toast.show({
-        text: newProps.error,
+        text: newProps.error + '',
         type: 'warning',
         buttonText: 'Okay'
       })
@@ -52,7 +52,7 @@ class NewGame extends Component {
           <FormInput name="bet" type="text" label="Your Bet" placeholder="ETH" />
           <RpsShapeInput name="shape" />
           <Button disabled={submitting} block primary onPress={handleSubmit(this.onSubmit)} style={styles.submitBtn}>
-            <Text style={styles.submitBtnText}>Submit{submitting && '...'}</Text>
+            <Text style={styles.submitBtnText}>Submit{submitting && 'ing...'}</Text>
           </Button>
         </Form>
       </AppLayout>
@@ -63,9 +63,7 @@ class NewGame extends Component {
 const mapStateToProps = (state, ownProps) => {
   return {
     initialValues: {
-      fromAccount: ownProps.credentials.ethAddress,
-      bet: '22',
-      shape: 'scissors'
+      fromAccount: ownProps.credentials.ethAddress
     },
     formValues: getFormValues('CreateGameForm')(state),
     startGame: makeFormSubmitHandler(startGame)
